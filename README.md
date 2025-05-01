@@ -161,6 +161,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Contact
 
-Your Name - your.email@example.com
+Your Name - achrafjabbari1@gmail.com
 
-Project Link: [https://github.com/yourusername/content-summarization-api](https://github.com/yourusername/content-summarization-api)
+Project Link: [https://github.com/AshrafJB2/pfeProject](https://github.com/AshrafJB2/pfeProject)
