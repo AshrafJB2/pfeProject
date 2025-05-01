@@ -1,11 +1,11 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.http import FileResponse
 from io import BytesIO
 from docx import Document as DocxDocument
 from .models import Content
-from .serializers import ContentSerializer
+from .serializers import ContentSerializer, UserSerializer
 from .utils import extract_text, process_with_gemini
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
@@ -13,6 +13,10 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 import re
 
+
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 class DownloadContentView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
