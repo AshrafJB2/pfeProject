@@ -29,6 +29,14 @@ class ContentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Either file or text must be provided")
         return data
 
+
+class GetUser(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
+        read_only_fields = ('id', 'username', 'email')
+
+
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     

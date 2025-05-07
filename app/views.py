@@ -5,13 +5,16 @@ from django.http import FileResponse
 from io import BytesIO
 from docx import Document as DocxDocument
 from .models import Content
-from .serializers import ContentSerializer, UserSerializer
+from .serializers import ContentSerializer, UserSerializer, GetUser
 from .utils import extract_text, process_with_gemini
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 import re
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterView(generics.CreateAPIView):
@@ -127,11 +130,15 @@ class DownloadContentView(generics.RetrieveAPIView):
 
 class ContentCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Content.objects.all()
     serializer_class = ContentSerializer
 
+    def get_queryset(self):
+        # Filter content by the authenticated user
+        return Content.objects.filter(user=self.request.user)
+
     def perform_create(self, serializer):
-        instance = serializer.save()
+        # Save the content with the authenticated user
+        instance = serializer.save(user=self.request.user)
 
         # Extract text from file if provided
         if instance.original_file:
@@ -153,19 +160,16 @@ class ContentCreateView(generics.ListCreateAPIView):
 
 class ContentDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Content.objects.all()
     serializer_class = ContentSerializer
 
-    def get(self, request, *args, **kwargs):
-        content = self.get_object()
+    def get_queryset(self):
+        # Filter content by the authenticated user
+        return Content.objects.filter(user=self.request.user)
 
-        # Return JSON response with all content data
-        return Response({
-            'id': content.id,
-            'title': content.auto_title,
-            'summary': content.summary,
-            'keywords': content.keywords,
-            'original_text': content.extracted_text[:500] + '...' if content.extracted_text else None,  # Preview of first 500 chars
-            'summary_length': content.summary_length,
-            'created_at': content.created_at
-        })
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        serializer = GetUser(request.user)
+        return Response(serializer.data)
