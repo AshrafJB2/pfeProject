@@ -1,18 +1,7 @@
-# 📝 ToDo App
+# 📝 Summarizing app
 
-A simple and efficient ToDo application built using **Vite (React)** for the frontend and **Django (REST API)** for the backend.
+A ai text and files summarizing application built using **Vite (React)** for the frontend and **Django (REST API)** for the backend.
 
----
-
-## 🚀 Features
-
-- Create, update, and delete tasks
-- Mark tasks as completed
-- Filter tasks (e.g., all, completed, pending)
-- Responsive and clean UI
-- RESTful API for task management
-
----
 
 ## 📁 Project Structure
 
