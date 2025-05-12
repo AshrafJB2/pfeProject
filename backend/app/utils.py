@@ -130,9 +130,8 @@ def process_with_gemini(text, length=25):
     try:
         # Get analysis results with system instruction
         analysis_response = model.generate_content(
-            analysis_prompt,
-            system_instruction=system_instruction
-        )
+    system_instruction.strip() + "\n" + analysis_prompt
+)
         analysis_parts = analysis_response.text.split('\n')
         
         results = {
@@ -156,9 +155,8 @@ def process_with_gemini(text, length=25):
         
         # Get summary with controlled length
         summary_response = model.generate_content(
-            summary_prompt,
-            system_instruction=system_instruction
-        )
+    system_instruction.strip() + "\n" + summary_prompt
+)
         results['summary'] = summary_response.text.strip()
         
         # Add word count information
